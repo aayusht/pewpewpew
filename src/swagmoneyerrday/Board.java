@@ -127,7 +127,7 @@ public class Board extends JPanel implements ActionListener {
 
     /**
      * called in the paintComponent method, creates two font objects and 
-     * uses the metrics to calculate where to draw the two Strings before
+     * uses the metrics to calculate where to draw the three Strings before
      * the game starts
      * @param g - graphics used by Board
      */
@@ -158,7 +158,7 @@ public class Board extends JPanel implements ActionListener {
     
     /**
      * called in the paintComponent method, creates two font objects and 
-     * uses the metrics to calculate where to draw the two Strings at the 
+     * uses the metrics to calculate where to draw the three Strings at the 
      * end of the game
      * @param g - graphics used by Board
      */
@@ -319,7 +319,8 @@ public class Board extends JPanel implements ActionListener {
         public void keyReleased(KeyEvent e) { craft.keyReleased(e); }
         
         /**
-         * check craft for keypressed or if game has not started
+         * check craft for keypressed or if game has not started/game is over checks
+         * keyboard directly since craft was killed
          */
         @Override
         public void keyPressed(KeyEvent e) {
