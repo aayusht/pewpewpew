@@ -11,9 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.File;
-import java.io.IOException;
 
 import javax.sound.sampled.*;
 import javax.swing.JPanel;
@@ -84,7 +83,8 @@ public class Board extends JPanel implements ActionListener {
     }
 
     /**
-     * overridden method called every frame, displays all components, 
+     * called in repaint (see actionPerformed), overridden 
+     * method called every frame, displays all components, 
      * unless game is not yet started or game is over
      * 
      * also syncs the game to current frame, corrected for lag
@@ -109,7 +109,9 @@ public class Board extends JPanel implements ActionListener {
         	g.drawImage(craft.getImage(), craft.getX(), craft.getY(), this);
         }
         ArrayList<Missile> ms = craft.getMissiles();
-        for (Missile m : ms) {
+        Iterator itr = ms.iterator();
+        while (itr.hasNext()) {
+        	Missile m = (Missile)itr.next();
             if (m.isVisible()) {
                 g.drawImage(m.getImage(), m.getX(), m.getY(), this);
             }
@@ -186,8 +188,8 @@ public class Board extends JPanel implements ActionListener {
     }
 
     /**
-     * if the game has started, this is called every frame to update
-     * all components, and repaint them afterwards
+     * if the game has started, this is called every frame recursively
+     * to update all components, and repaint them afterwards
      * @param e - not used, part of superclass
      */
     @Override
