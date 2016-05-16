@@ -22,15 +22,13 @@ public class Missile extends Sprite {
      */
     public Missile(int x, int y) {
         super(x, y);
-
         initMissile();
     }
     
     /**
      * a method that creates missile and plays an audio file
      */
-    private void initMissile() {
-        
+    private void initMissile() {   
         loadImage("src/missile.png");
         getImageDimensions(); 
         playPewPew();
@@ -40,9 +38,7 @@ public class Missile extends Sprite {
      * a method that moves the missile up, kills it if offscreen
      */
     public void move() {
-        
         y -= MISSILE_SPEED;
-        
         if (y < 0) { vis = false; }
     }
     /**
