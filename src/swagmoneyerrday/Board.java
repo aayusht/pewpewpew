@@ -49,7 +49,7 @@ public class Board extends JPanel implements ActionListener {
     private final boolean DEBUG_INFO = false;
     private final boolean SLOW_MO = false;
     private final boolean SIMPLE_MODE = false;
-    private final boolean IMG_TEST = true;
+    private final boolean IMG_TEST = false;
     private final int REALLY_SLOW = 250;
 
     /**
