@@ -86,7 +86,7 @@ public class Shooter extends Sprite {
     /**
      * a method that adds one ammo
      */
-    public void addAmmo() { ammo++; }
+    public void addAmmo() { ammo += 2; }
     /**
      * a method that tracks released keys
      * @param e - key released

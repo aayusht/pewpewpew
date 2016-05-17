@@ -41,7 +41,16 @@ public class Board extends JPanel implements ActionListener {
     private final int ICRAFT_X = B_WIDTH/2;
     private final int ICRAFT_Y = B_HEIGHT-TRUMP_SIZE;
     private final int DELAY = 15;
+    
+    //debug variables
     private final boolean KILL_DEATH_EXTRAVAGANZA = false;
+    private final boolean SHOOTER_ONLY = false;
+    private final boolean TRUMPS_ONLY = false;
+    private final boolean DEBUG_INFO = false;
+    private final boolean SLOW_MO = false;
+    private final boolean SIMPLE_MODE = false;
+    private final boolean IMG_TEST = true;
+    private final int REALLY_SLOW = 250;
 
     /**
      * Constructor - see initBoard()
@@ -60,17 +69,24 @@ public class Board extends JPanel implements ActionListener {
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         if (KILL_DEATH_EXTRAVAGANZA) { spawnRate = 1; }
-        craft = new Shooter(ICRAFT_X, ICRAFT_Y, STARTING_AMMO);
-        
+        if (!TRUMPS_ONLY) {
+	        if (SHOOTER_ONLY) { craft = new Shooter(ICRAFT_X, ICRAFT_Y, 1000); }
+	        else { craft = new Shooter(ICRAFT_X, ICRAFT_Y, STARTING_AMMO); }
+        }
         gameover = false;
         gamestarted = false;
         spawnRate = 100;
         frameAtLastSpawn = 0;
         currentFrame = 0;
         score = 0;
-        initTrumps();
-
-        timer = new Timer(DELAY, this);
+        if (!SHOOTER_ONLY) { initTrumps(); }
+        if (!SLOW_MO) {
+        	timer = new Timer(DELAY, this);
+        }
+        else { 
+        	timer = new Timer(REALLY_SLOW, this); 
+        	spawnRate = 15;
+        }
         timer.start();
     }
 
@@ -93,38 +109,62 @@ public class Board extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (!gamestarted) { drawStartScreen(g); }
+        if (IMG_TEST) { drawSimple(g); }
+        else if (!gamestarted) { drawStartScreen(g); }
         else if (gameover) { drawGameOver(g); } 
         else if (gamestarted) { drawObjects(g); } 
         Toolkit.getDefaultToolkit().sync();
     }
-
+    
+    /**
+     * testing images
+     * @param g - graphics for the Board
+     */
+    private void drawSimple(Graphics g) {
+	    g.drawImage(craft.getImage(), 200, 0, this);
+	    Missile m = new Missile(0, 0);
+	    Trump a = new Trump(100, 0, 0, 0);
+	    g.drawImage(m.getImage(), 0, 0, this);
+	    g.drawImage(a.getImage(), 100, 0, this);
+	    g.setColor(Color.WHITE);
+	    g.drawString("ye ghetto", 200, 200);
+    }
+    
     /**
      * called in the paintComponent method, draws craft, each missile, 
      * and each trump, and updates score in top left
      * @param g - graphics for the Board
      */
     private void drawObjects(Graphics g) {
-        if (craft.isVisible()) { 
-        	g.drawImage(craft.getImage(), craft.getX(), craft.getY(), this);
+        if (!TRUMPS_ONLY) {
+	    	if (craft.isVisible()) { 
+	        	g.drawImage(craft.getImage(), craft.getX(), craft.getY(), this);
+	        }
+	        ArrayList<Missile> ms = craft.getMissiles();
+	        Iterator itr = ms.iterator();
+	        while (itr.hasNext()) {
+	        	Missile m = (Missile)itr.next();
+	            if (m.isVisible()) {
+	                g.drawImage(m.getImage(), m.getX(), m.getY(), this);
+	            }
+	        }
         }
-        ArrayList<Missile> ms = craft.getMissiles();
-        Iterator itr = ms.iterator();
-        while (itr.hasNext()) {
-        	Missile m = (Missile)itr.next();
-            if (m.isVisible()) {
-                g.drawImage(m.getImage(), m.getX(), m.getY(), this);
-            }
+        if (!SHOOTER_ONLY) {
+	        for (Trump a : trumps) {
+	            if (a.isVisible()) {
+	                g.drawImage(a.getImage(), a.getX(), a.getY(), this);
+	            }
+	        }
         }
-        for (Trump a : trumps) {
-            if (a.isVisible()) {
-                g.drawImage(a.getImage(), a.getX(), a.getY(), this);
-            }
+        if (!TRUMPS_ONLY) {
+	        String accuracy = "";
+	        if (craft.shots() > 0) { accuracy = " Accuracy: " + score*100/craft.shots() + "%"; }
+	        g.setColor(Color.WHITE);
+	        g.drawString("Trumps killed: " + score + " Ammo left: " + craft.ammo() + accuracy, 5, 15);
         }
-        String accuracy = "";
-        if (craft.shots() > 0) { accuracy = " Accuracy: " + score*100/craft.shots() + "%"; }
-        g.setColor(Color.WHITE);
-        g.drawString("Trumps killed: " + score + " Ammo left: " + craft.ammo() + accuracy, 5, 15);
+        if (DEBUG_INFO) {
+        	g.drawString("Current Frame: " + currentFrame + " Frame at last Spawn: " + frameAtLastSpawn + " Frames Between Spawns: " + spawnRate, 5, 35);
+        }
     }
 
     /**
@@ -195,12 +235,16 @@ public class Board extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (gamestarted) {
-            checkGameOver();
         	currentFrame++;
-        	updateCraft();
-        	updateMissiles();
-        	updateTrumps();
-        	checkCollisions();
+        	if (!TRUMPS_ONLY) {
+	        	updateCraft();
+	        	updateMissiles();
+        	}
+        	if (!SHOOTER_ONLY) {
+        		updateTrumps();
+        	}
+        	if (!TRUMPS_ONLY && !SHOOTER_ONLY) { checkCollisions(); }
+        	checkGameOver();
         	repaint();
         }
     }
@@ -209,7 +253,7 @@ public class Board extends JPanel implements ActionListener {
      * checks if game is over (if there is any ammo) and stops timer
      */
     private void checkGameOver() {
-    	if (craft.ammo() <= 0) { gameover = true; }
+    	if (!TRUMPS_ONLY && craft.ammo() <= 0) { gameover = true; }
     	if (gameover) { timer.stop(); }
     }
 
@@ -267,6 +311,11 @@ public class Board extends JPanel implements ActionListener {
     	int multiplier = (int)(Math.random()*10) + 5; //between 5 and 14
     	int vy = (int)(Math.random()*10)-5; //between -5(up) and 4(down)
     	double a = Math.random()*.1; //between -.1 and .1
+    	if (SIMPLE_MODE) {
+    		vy = 0;
+    		a = 0;
+    		multiplier = 2;
+    	}
     	int x;
     	if (dir > 0) { x = 0; }
     	else { x = B_WIDTH; }

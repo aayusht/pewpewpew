@@ -6,6 +6,8 @@ import javax.swing.ImageIcon;
 
 /**
  * abstract class that provides a general sprite superclass
+ * @authors Aayush Tyagi, Nikhil Swaminathan, Martin Lee, Paramdeep Atwal, Kevin Lin
+ * @period 5
  */
 public abstract class Sprite {
 
