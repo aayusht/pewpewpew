@@ -21,7 +21,7 @@ public class Trump extends Sprite {
         super(x, y);
         this.vx = vx;
         this.a = a;
-        initAlien();
+        initTrump();
     }
     /**
      * Constructor to initialize object with x and y velocity
@@ -36,12 +36,12 @@ public class Trump extends Sprite {
         this.vx = vx;
         this.vy = vy;
         this.a = a;
-        initAlien();
+        initTrump();
     }
     /**
      * Method to load image of object onto the screen
      */
-    private void initAlien() {
+    private void initTrump() {
         loadImage("src/trump.png");
         getImageDimensions();
     }
