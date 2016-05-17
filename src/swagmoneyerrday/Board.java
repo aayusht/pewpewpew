@@ -34,7 +34,7 @@ public class Board extends JPanel implements ActionListener {
     private int frameAtLastSpawn = 0;
     private int currentFrame = 0;
     private int score = 0;
-    private final int STARTING_AMMO = 15;
+    private final int STARTING_AMMO = 30;
     private final int TRUMP_SIZE = 32;
     private final int B_WIDTH = 1300;
     private final int B_HEIGHT = 700;
