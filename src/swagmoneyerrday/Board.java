@@ -68,7 +68,6 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-        if (KILL_DEATH_EXTRAVAGANZA) { spawnRate = 1; }
         if (!TRUMPS_ONLY) {
 	        if (SHOOTER_ONLY) { craft = new Shooter(ICRAFT_X, ICRAFT_Y, 1000); }
 	        else { craft = new Shooter(ICRAFT_X, ICRAFT_Y, STARTING_AMMO); }
@@ -87,6 +86,7 @@ public class Board extends JPanel implements ActionListener {
         	timer = new Timer(REALLY_SLOW, this); 
         	spawnRate = 15;
         }
+        if (KILL_DEATH_EXTRAVAGANZA) { spawnRate = 1; }
         timer.start();
     }
 
