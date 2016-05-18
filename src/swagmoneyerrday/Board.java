@@ -42,7 +42,14 @@ public class Board extends JPanel implements ActionListener {
     private final int ICRAFT_Y = B_HEIGHT-TRUMP_SIZE;
     private final int DELAY = 15;
     
-    //debug variables
+    /*
+     * For Kevin's sake of mind:
+     * Throughout our coding process, instead of keeping old files, 
+     * we simply made debug variables so that we could artificially 
+     * keep out the newer parts of the code
+     *
+     * We also have some testing modes such as killdeath and simple mode
+     */
     private final boolean KILL_DEATH_EXTRAVAGANZA = false;
     private final boolean SHOOTER_ONLY = false;
     private final boolean TRUMPS_ONLY = false;
